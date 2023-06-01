@@ -267,7 +267,7 @@ pub mod internal;
 
 #[cfg(test)]
 #[macro_use]
-extern crate cfg_if;
+use cfg_if;
 
 #[cfg(test)]
 pub mod test_helpers;

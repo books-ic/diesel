@@ -1,4 +1,4 @@
-extern crate dotenvy;
+use dotenvy;
 
 use crate::prelude::*;
 
