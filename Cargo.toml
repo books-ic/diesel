@@ -27,6 +27,9 @@ members = [
     "examples/sqlite/getting_started_step_3",
 ]
 
+[workspace.dependencies]
+libsqlite3-sys = {workspace = true}
+
 [profile.dev.package.insta]
 opt-level = 3
 
