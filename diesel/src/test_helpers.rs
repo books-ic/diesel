@@ -2,7 +2,7 @@ use dotenvy;
 
 use crate::prelude::*;
 
-cfg_if! {
+cfg_if::cfg_if! {
     if #[cfg(feature = "sqlite")] {
         pub type TestConnection = SqliteConnection;
 

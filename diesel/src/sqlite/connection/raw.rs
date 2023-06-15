@@ -7,9 +7,13 @@ use std::os::raw as libc;
 use std::ptr::NonNull;
 use std::{mem, ptr, slice, str};
 
+use lazy_static::lazy_static;
+use sqlite_vfs::register;
+
 use super::functions::{build_sql_function_args, process_sql_function_result};
+use super::memory::VectorMemory;
 use super::stmt::ensure_sqlite_ok;
-use super::{Sqlite, SqliteAggregateFunction};
+use super::{vfs, Sqlite, SqliteAggregateFunction};
 use crate::deserialize::FromSqlRow;
 use crate::result::Error::DatabaseError;
 use crate::result::*;
@@ -35,17 +39,27 @@ pub(super) struct RawConnection {
 }
 
 impl RawConnection {
-    pub(super) fn establish(database_url: &str) -> ConnectionResult<Self> {
+    pub(super) fn establish(_database_url: &str) -> ConnectionResult<Self> {
+        register::<vfs::Connection<VectorMemory>, vfs::PagesVfs<VectorMemory>>(
+            "vfs",
+            vfs::PagesVfs::default(),
+            true,
+        )
+        .unwrap();
         let mut conn_pointer = ptr::null_mut();
+        let vfs_cstring = CString::new("vfs")?;
+        let database_url = CString::new("main.db")?;
 
-        let database_url = if database_url.starts_with("sqlite://") {
-            CString::new(database_url.replacen("sqlite://", "file:", 1))?
-        } else {
-            CString::new(database_url)?
-        };
-        let flags = ffi::SQLITE_OPEN_READWRITE | ffi::SQLITE_OPEN_CREATE | ffi::SQLITE_OPEN_URI;
+        let flags = ffi::SQLITE_OPEN_READWRITE | ffi::SQLITE_OPEN_CREATE;
+        // let flags = ffi::SQLITE_OPEN_READWRITE | ffi::SQLITE_OPEN_CREATE | ffi::SQLITE_OPEN_URI;
+
         let connection_status = unsafe {
-            ffi::sqlite3_open_v2(database_url.as_ptr(), &mut conn_pointer, flags, ptr::null())
+            ffi::sqlite3_open_v2(
+                database_url.as_ptr(),
+                &mut conn_pointer,
+                flags,
+                vfs_cstring.as_ptr(),
+            )
         };
 
         match connection_status {
@@ -580,4 +594,14 @@ where
 extern "C" fn destroy_boxed<F>(data: *mut libc::c_void) {
     let ptr = data as *mut F;
     unsafe { Box::from_raw(ptr) };
+}
+
+#[cfg(test)]
+mod tests {
+    use super::RawConnection;
+
+    #[test]
+    fn raw_connection_should_work() {
+        let raw_connection = RawConnection::establish("main.db").unwrap();
+    }
 }

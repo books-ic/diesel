@@ -2,11 +2,21 @@ extern crate libsqlite3_sys as ffi;
 
 mod bind_collector;
 mod functions;
+mod memory;
 mod raw;
 mod row;
 mod sqlite_value;
 mod statement_iterator;
 mod stmt;
+mod vfs;
+
+/// A small module that makes get_random work on wasm32-unknown-unknown.
+#[cfg(all(
+    target_arch = "wasm32",
+    target_vendor = "unknown",
+    target_os = "unknown"
+))]
+mod wasm_get_random;
 
 pub(in crate::sqlite) use self::bind_collector::SqliteBindCollector;
 pub use self::bind_collector::SqliteBindValue;
@@ -136,6 +146,14 @@ impl SimpleConnection for SqliteConnection {
 
 impl ConnectionSealed for SqliteConnection {}
 
+// lazy_static! {
+//     static ref RAW_CONNECTION: RawConnection = {
+//         let raw_connection = RawConnection::establish("main.db").unwrap();
+//         raw_connection
+//     };
+//     static ref S: String = String::new();
+// }
+
 impl Connection for SqliteConnection {
     type Backend = Sqlite;
     type TransactionManager = AnsiTransactionManager;
@@ -150,11 +168,18 @@ impl Connection for SqliteConnection {
         use crate::result::ConnectionError::CouldntSetupConfiguration;
 
         let raw_connection = RawConnection::establish(database_url)?;
-        let conn = Self {
+
+        let mut conn = Self {
             statement_cache: StatementCache::new(),
             raw_connection,
             transaction_state: AnsiTransactionManager::default(),
         };
+        conn.batch_execute(
+            "
+        PRAGMA page_size=4096;
+        PRAGMA journal_mode=MEMORY;",
+        )
+        .unwrap();
         conn.register_diesel_sql_functions()
             .map_err(CouldntSetupConfiguration)?;
         Ok(conn)
