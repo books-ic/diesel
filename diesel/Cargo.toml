@@ -14,9 +14,12 @@ rust-version = "1.65.0"
 
 [dependencies]
 byteorder = { version = "1.0", optional = true }
-chrono = { version = "0.4.20", optional = true, default-features = false, features = ["clock", "std"] }
+chrono = { version = "0.4.20", optional = true, default-features = false, features = [
+    "clock",
+    "std",
+] }
 libc = { version = "0.2.0", optional = true }
-libsqlite3-sys = { workspace = true, optional = true}
+libsqlite3-sys = { workspace = true, optional = true }
 # libsqlite3-sys = { version = ">=0.17.2, <0.27.0", optional = true, features = ["bundled_bindings"] }
 mysqlclient-sys = { version = "0.2.5", optional = true }
 pq-sys = { version = "0.4.0", optional = true }
@@ -35,11 +38,11 @@ bitflags = { version = "2.0.0", optional = true }
 r2d2 = { version = ">= 0.8.2, < 0.9.0", optional = true }
 itoa = { version = "1.0.0", optional = true }
 time = { version = "0.3.9", optional = true, features = ["macros"] }
-sqlite-vfs = {workspace = true}
+sqlite-vfs = { workspace = true }
 ic-cdk = "0.8.1"
 lazy_static = "1.2"
 
-[target.'cfg(all(target_arch = "wasm32", target_vendor = "unknown", target_os = "unknown"))'.dependencies]
+# [target.'cfg(all(target_arch = "wasm32", target_vendor = "unknown", target_os = "unknown"))'.dependencies]
 getrandom = { version = "0.2", features = ["custom"] }
 
 [dependencies.diesel_derives]
@@ -54,7 +57,15 @@ quickcheck = "1.0.3"
 
 [features]
 default = ["with-deprecated", "32-column-tables"]
-extras = ["chrono", "time", "serde_json", "uuid", "network-address", "numeric", "r2d2"]
+extras = [
+    "chrono",
+    "time",
+    "serde_json",
+    "uuid",
+    "network-address",
+    "numeric",
+    "r2d2",
+]
 unstable = ["diesel_derives/nightly"]
 large-tables = ["32-column-tables"]
 huge-tables = ["64-column-tables"]
@@ -62,8 +73,19 @@ huge-tables = ["64-column-tables"]
 64-column-tables = ["32-column-tables", "diesel_derives/64-column-tables"]
 128-column-tables = ["64-column-tables", "diesel_derives/128-column-tables"]
 postgres = ["pq-sys", "postgres_backend"]
-sqlite = ["libsqlite3-sys", "diesel_derives/sqlite", "time?/formatting", "time?/parsing"]
-mysql = ["mysqlclient-sys", "url", "percent-encoding", "bitflags", "mysql_backend"]
+sqlite = [
+    "libsqlite3-sys",
+    "diesel_derives/sqlite",
+    "time?/formatting",
+    "time?/parsing",
+]
+mysql = [
+    "mysqlclient-sys",
+    "url",
+    "percent-encoding",
+    "bitflags",
+    "mysql_backend",
+]
 without-deprecated = ["diesel_derives/without-deprecated"]
 with-deprecated = ["diesel_derives/with-deprecated"]
 network-address = ["ipnetwork", "libc"]

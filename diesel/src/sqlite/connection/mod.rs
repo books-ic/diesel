@@ -174,12 +174,16 @@ impl Connection for SqliteConnection {
             raw_connection,
             transaction_state: AnsiTransactionManager::default(),
         };
-        conn.batch_execute(
-            "
-        PRAGMA page_size=4096;
-        PRAGMA journal_mode=MEMORY;",
-        )
-        .unwrap();
+        #[cfg(any(target_arch = "wasm32"))]
+        {
+            conn.batch_execute(
+                "
+                PRAGMA page_size=4096;
+                PRAGMA journal_mode=MEMORY;",
+            )
+            .unwrap();
+        }
+
         conn.register_diesel_sql_functions()
             .map_err(CouldntSetupConfiguration)?;
         Ok(conn)

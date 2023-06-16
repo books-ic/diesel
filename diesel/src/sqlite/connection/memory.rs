@@ -10,7 +10,7 @@ extern "C" {
     pub(crate) fn stable64_write(offset: u64, src: u64, size: u64);
 }
 
-#[derive(Clone, Copy, Default)]
+#[derive(Clone, Copy, Default, Debug)]
 pub(crate) struct Ic0StableMemory;
 
 impl Memory for Ic0StableMemory {
