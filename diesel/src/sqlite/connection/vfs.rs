@@ -2,7 +2,7 @@ extern crate libsqlite3_sys as ffi;
 
 use std::io::{self, ErrorKind};
 use std::sync::{Arc, Mutex};
-use std::time::{Duration, Instant};
+use std::time::Duration;
 
 use super::memory::Memory;
 use sqlite_vfs::{LockKind, OpenKind, OpenOptions, Vfs};
@@ -79,9 +79,10 @@ where
     }
 
     fn sleep(&self, duration: Duration) -> Duration {
-        let now = Instant::now();
-        conn_sleep((duration.as_millis() as u32).max(1));
-        now.elapsed()
+        duration
+        // let now = Instant::now();
+        // conn_sleep((duration.as_millis() as u32).max(1));
+        // now.elapsed()
     }
 }
 

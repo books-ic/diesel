@@ -288,8 +288,6 @@ fn run_sql_from_file<DB: Backend>(
 
 #[cfg(test)]
 mod tests {
-    extern crate tempfile;
-
     use super::*;
 
     use self::tempfile::Builder;
