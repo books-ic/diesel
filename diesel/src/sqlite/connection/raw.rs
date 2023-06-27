@@ -9,7 +9,7 @@ use std::{mem, ptr, slice, str};
 
 use super::functions::{build_sql_function_args, process_sql_function_result};
 use super::stmt::ensure_sqlite_ok;
-use super::{vfs, Sqlite, SqliteAggregateFunction};
+use super::{Sqlite, SqliteAggregateFunction};
 use crate::deserialize::FromSqlRow;
 use crate::result::Error::DatabaseError;
 use crate::result::*;
@@ -35,6 +35,7 @@ pub(super) struct RawConnection {
 }
 
 impl RawConnection {
+    #[allow(unused_variables)]
     pub(super) fn establish(database_url: &str) -> ConnectionResult<Self> {
         let mut conn_pointer = ptr::null_mut();
 

@@ -275,6 +275,7 @@ impl<T: Memory> Drop for Connection<T> {
     }
 }
 
+#[allow(dead_code)]
 fn conn_sleep(ms: u32) {
     std::thread::sleep(Duration::from_secs(ms.into()));
 }

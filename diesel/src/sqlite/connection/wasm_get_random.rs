@@ -15,7 +15,7 @@
 //! for more details on custom implementations.
 
 /// A getrandom implementation that always fails
-pub fn always_fail(_buf: &mut [u8]) -> Result<(), getrandom::Error> {
+pub(crate) fn always_fail(_buf: &mut [u8]) -> Result<(), getrandom::Error> {
     Err(getrandom::Error::UNSUPPORTED)
 }
 getrandom::register_custom_getrandom!(always_fail);

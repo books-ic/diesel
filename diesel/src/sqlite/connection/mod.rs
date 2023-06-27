@@ -169,20 +169,27 @@ impl Connection for SqliteConnection {
 
         let raw_connection = RawConnection::establish(database_url)?;
 
-        let mut conn = Self {
+        #[cfg(not(any(target_arch = "wasm32")))]
+        let conn = Self {
             statement_cache: StatementCache::new(),
             raw_connection,
             transaction_state: AnsiTransactionManager::default(),
         };
         #[cfg(any(target_arch = "wasm32"))]
-        {
+        let conn = {
+            let mut conn = Self {
+                statement_cache: StatementCache::new(),
+                raw_connection,
+                transaction_state: AnsiTransactionManager::default(),
+            };
             conn.batch_execute(
                 "
                 PRAGMA page_size=4096;
                 PRAGMA journal_mode=MEMORY;",
             )
             .unwrap();
-        }
+            conn
+        };
 
         conn.register_diesel_sql_functions()
             .map_err(CouldntSetupConfiguration)?;
