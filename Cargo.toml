@@ -28,8 +28,11 @@ members = [
 ]
 
 [workspace.dependencies]
-libsqlite3-sys = {path = "../rusqlite/libsqlite3-sys", package = "libsqlite3-sys-ic", features=["bundled"]}
-sqlite-vfs = {path = "../sqlite-vfs"}
+libsqlite3-sys = { path = "../rusqlite/libsqlite3-sys", package = "libsqlite3-sys-ic", features = [
+    "bundled",
+] }
+sqlite-vfs = { path = "../sqlite-vfs" }
+canister_sqlite_vfs = { path = "../../backend/canister_sqlite_vfs" }
 
 [profile.dev.package.insta]
 opt-level = 3

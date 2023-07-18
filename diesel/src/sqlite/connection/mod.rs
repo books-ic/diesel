@@ -2,13 +2,11 @@ extern crate libsqlite3_sys as ffi;
 
 mod bind_collector;
 mod functions;
-mod memory;
 mod raw;
 mod row;
 mod sqlite_value;
 mod statement_iterator;
 mod stmt;
-mod vfs;
 
 /// A small module that makes get_random work on wasm32-unknown-unknown.
 #[cfg(all(

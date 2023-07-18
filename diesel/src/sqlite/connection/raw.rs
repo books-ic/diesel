@@ -56,8 +56,8 @@ impl RawConnection {
         let connection_status = {
             use sqlite_vfs::register;
 
-            use super::memory::Ic0StableMemory;
-            use super::vfs;
+            use canister_sqlite_vfs::memory::Ic0StableMemory;
+            use canister_sqlite_vfs::vfs;
 
             let database_url = CString::new("main.db")?;
             let vfs_cstring = CString::new("vfs")?;
