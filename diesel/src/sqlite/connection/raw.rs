@@ -54,19 +54,8 @@ impl RawConnection {
         };
         #[cfg(any(target_arch = "wasm32"))]
         let connection_status = {
-            use sqlite_vfs::register;
-
-            use canister_sqlite_vfs::memory::Ic0StableMemory;
-            use canister_sqlite_vfs::vfs;
-
-            let database_url = CString::new("main.db")?;
-            let vfs_cstring = CString::new("vfs")?;
-            register::<vfs::Connection<Ic0StableMemory>, vfs::PagesVfs<Ic0StableMemory>>(
-                "vfs",
-                vfs::PagesVfs::default(),
-                true,
-            )
-            .unwrap();
+            let vfs_cstring = CString::new("vfs").unwrap();
+            let database_url = CString::new(database_url).unwrap();
             let flags = ffi::SQLITE_OPEN_READWRITE | ffi::SQLITE_OPEN_CREATE;
             unsafe {
                 ffi::sqlite3_open_v2(
