@@ -8,14 +8,6 @@ mod sqlite_value;
 mod statement_iterator;
 mod stmt;
 
-/// A small module that makes get_random work on wasm32-unknown-unknown.
-#[cfg(all(
-    target_arch = "wasm32",
-    target_vendor = "unknown",
-    target_os = "unknown"
-))]
-mod wasm_get_random;
-
 pub(in crate::sqlite) use self::bind_collector::SqliteBindCollector;
 pub use self::bind_collector::SqliteBindValue;
 pub use self::sqlite_value::SqliteValue;
