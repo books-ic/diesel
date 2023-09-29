@@ -34,7 +34,7 @@ libsqlite3-sys = { path = "../../../libs/rusqlite/libsqlite3-sys", package = "li
 sqlite-vfs = { path = "../../../libs/sqlite-vfs" }
 canister_sqlite_vfs = { path = "../../canister_sqlite_vfs" }
 # time = { path = "../../time/time", optional = true, features = ["macros"] }
-time = { path = "../../../libs/time/time" }
+time = { path = "../time/time" }
 
 [profile.dev.package.insta]
 opt-level = 3
