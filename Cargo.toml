@@ -32,7 +32,7 @@ libsqlite3-sys = { path = "../rusqlite/libsqlite3-sys", package = "libsqlite3-sy
     "bundled",
 ] }
 sqlite-vfs = { path = "../sqlite-vfs" }
-canister_sqlite_vfs = { path = "../../canister_sqlite_vfs" }
+canister_sqlite_vfs = { path = "../canister_sqlite_vfs" }
 # time = { path = "../../time/time", optional = true, features = ["macros"] }
 time = { path = "../time/time" }
 
