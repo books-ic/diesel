@@ -31,7 +31,7 @@ members = [
 libsqlite3-sys = { path = "../../../libs/rusqlite/libsqlite3-sys", package = "libsqlite3-sys-ic", features = [
     "bundled",
 ] }
-sqlite-vfs = { path = "../../../libs/sqlite-vfs" }
+sqlite-vfs = { path = "../sqlite-vfs" }
 canister_sqlite_vfs = { path = "../../canister_sqlite_vfs" }
 # time = { path = "../../time/time", optional = true, features = ["macros"] }
 time = { path = "../time/time" }
